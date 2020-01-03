@@ -275,7 +275,6 @@ papaya.volume.Transform.prototype.updateImageMat = function (centerX, centerY, c
     var theta, cosTheta, sinTheta, ctrOut, ctrIn;
     this.updateCenterMat(centerX, centerY, centerZ);
 
-
     theta = (rotX * Math.PI) / 180.0;
     cosTheta = Math.cos(theta);
     sinTheta = Math.sin(theta);
@@ -359,7 +358,8 @@ papaya.volume.Transform.prototype.updateImageMat = function (centerX, centerY, c
                 (this.tempMat[ctrOut][3] * this.sizeMat[3][ctrIn]);
         }
     }
-
+    console.log('papaya updateImageMat');
+    this.printTransform(this.tempMat2);
     this.volume.transform.updateTransforms(this.tempMat2);
 };
 
