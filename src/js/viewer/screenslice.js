@@ -390,6 +390,8 @@ papaya.viewer.ScreenSlice.prototype.updateSlice = function (slice, force) {
         if (usedRaster) {
             this.contextMain.putImageData(this.imageDataDraw, 0, 0);
         }
+
+        if (this.manager.isPerformanceTest) this.manager.onTestEnd();
     } else this.imageUpdated = false;
 };
 

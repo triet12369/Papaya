@@ -146,6 +146,10 @@ papaya.viewer.Viewer = papaya.viewer.Viewer || function (container, width, heigh
 
     // mouse move handler
     this.mouseMoveHandler = false;
+
+    // test
+    this.isPerformanceTest = true;
+    this.updateSliceCount = 0;
 };
 
 
@@ -4403,4 +4407,28 @@ papaya.viewer.Viewer.prototype.onMainImageChanged = function () {
 
 papaya.viewer.Viewer.prototype.suspendSliceUpdate = function () {
     this.reactViewerConnector.imageReplacedExternally = true;
+}
+
+// performance test
+
+papaya.viewer.Viewer.prototype.updateSliceTest = function () {
+    this.isPerformanceTest = true;
+    var maxDim = this.volume.header.imageDimensions.zDim;
+    console.log('Testing for slice direction:', this.axialSlice.sliceDirection);
+    console.log('Numbers of worker:', this.axialSlice.numOfWorkers ? this.axialSlice.numOfWorkers : 0);
+    console.log('Num of images:', maxDim);
+    console.time('updateAllSlices');
+    this.axialSlice.updateSlice(0);
+}
+
+papaya.viewer.Viewer.prototype.onTestEnd = function () {
+    var maxDim = this.volume.header.imageDimensions.zDim;
+    // console.log('Update slice count:', this.updateSliceCount);
+    this.updateSliceCount++;
+    if (this.updateSliceCount >= maxDim) {
+        console.timeEnd('updateAllSlices');
+        this.isPerformanceTest = false;
+        this.updateSliceCount = 0;
+        return;
+    } else this.axialSlice.updateSlice(this.updateSliceCount);
 }
